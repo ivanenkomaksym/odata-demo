@@ -1,4 +1,4 @@
-namespace odata_demo
+namespace ODataDemo
 {
     public class WeatherForecast
     {

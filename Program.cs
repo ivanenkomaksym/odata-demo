@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.OData;
 using Microsoft.OData.ModelBuilder;
-using odata_demo.Models;
+using ODataDemo.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

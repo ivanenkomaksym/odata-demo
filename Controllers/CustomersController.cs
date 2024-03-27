@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
-using odata_demo.Models;
+using ODataDemo.Models;
 
-namespace odata_demo.Controllers
+namespace ODataDemo.Controllers
 {
     public class CustomersController : ODataController
     {

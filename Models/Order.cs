@@ -1,4 +1,4 @@
-﻿namespace odata_demo.Models
+﻿namespace ODataDemo.Models
 {
     public class Order
     {

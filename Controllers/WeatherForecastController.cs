@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace odata_demo.Controllers
+namespace ODataDemo.Controllers
 {
     [ApiController]
     [Route("[controller]")]
