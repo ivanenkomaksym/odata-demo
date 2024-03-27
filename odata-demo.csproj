@@ -7,4 +7,8 @@
     <RootNamespace>odata_demo</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.2.5" />
+  </ItemGroup>
+
 </Project>
