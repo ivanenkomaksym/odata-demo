@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.OData;
+using Microsoft.AspNetCore.OData.Formatter.Serialization;
 using Microsoft.OData.ModelBuilder;
 using ODataDemo.Models;
+using ODataDemo.Serializers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,8 @@ modelBuilder.EntitySet<Customer>("Customers");
 builder.Services.AddControllers().AddOData(
     options => options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null).AddRouteComponents(
         "odata",
-        modelBuilder.GetEdmModel()));
+        modelBuilder.GetEdmModel(),
+        services => services.AddSingleton<ODataResourceSerializer, OmitNullResourceSerializer>()));
 
 var app = builder.Build();
 
