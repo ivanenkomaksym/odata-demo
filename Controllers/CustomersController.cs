@@ -13,6 +13,7 @@ namespace ODataDemo.Controllers
             {
                 Id = idx,
                 Name = $"Customer {idx}",
+                UserRole = null,
                 Orders = new List<Order>(
                     Enumerable.Range(1, 2).Select(dx => new Order
                     {
