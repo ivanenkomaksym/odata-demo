@@ -18,7 +18,16 @@ builder.Services.AddControllers().AddOData(
     options => options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null).AddRouteComponents(
         "odata",
         modelBuilder.GetEdmModel(),
-        services => services.AddSingleton<ODataResourceSerializer, OmitNullResourceSerializer>()));
+        // services => services.AddSingleton<ODataResourceSerializer, OmitNullResourceSerializer>()));
+        services => services.AddSingleton<ODataResourceSerializer, OmitPropertyWithDefaultValueResourceSerializer>(serviceProvider =>
+        {
+            var odataSerializerProvider = serviceProvider.GetRequiredService<IODataSerializerProvider>();
+            return new OmitPropertyWithDefaultValueResourceSerializer(odataSerializerProvider, new Dictionary<string, object> 
+            {
+                { nameof(Customer.StringPropertyWithDefaultValueToBeOmitted), string.Empty },
+                { nameof(Customer.BooleanPropertyWithDefaultValueToBeOmitted), false }
+            });
+        })));
 
 var app = builder.Build();
 
