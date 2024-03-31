@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "odata-demo", "odata-demo.csproj", "{699E35C3-27A8-430E-8E03-CE05C9F4C2ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODataDemo.UnitTests", "ODataDemo.UnitTests\ODataDemo.UnitTests.csproj", "{F39AED59-CB97-4B84-9D29-AC6F16DDE97E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODataDemo.WebApi", "ODataDemo.WebApi\ODataDemo.WebApi.csproj", "{29CD8544-D69C-4734-93B5-7B5B4DF11EDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{699E35C3-27A8-430E-8E03-CE05C9F4C2ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{699E35C3-27A8-430E-8E03-CE05C9F4C2ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{699E35C3-27A8-430E-8E03-CE05C9F4C2ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{699E35C3-27A8-430E-8E03-CE05C9F4C2ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F39AED59-CB97-4B84-9D29-AC6F16DDE97E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F39AED59-CB97-4B84-9D29-AC6F16DDE97E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F39AED59-CB97-4B84-9D29-AC6F16DDE97E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F39AED59-CB97-4B84-9D29-AC6F16DDE97E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29CD8544-D69C-4734-93B5-7B5B4DF11EDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29CD8544-D69C-4734-93B5-7B5B4DF11EDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29CD8544-D69C-4734-93B5-7B5B4DF11EDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29CD8544-D69C-4734-93B5-7B5B4DF11EDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
