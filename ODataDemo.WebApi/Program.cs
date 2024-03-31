@@ -72,3 +72,5 @@ static Action<IServiceCollection> ConfigureODataResourceSerializer(IConfiguratio
         });
     };
 }
+
+public partial class Program { }
