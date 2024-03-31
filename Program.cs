@@ -55,6 +55,10 @@ static Action<IServiceCollection> ConfigureODataResourceSerializer(IConfiguratio
             {
                 return new OmitNullResourceSerializer(odataSerializerProvider);
             }
+            else if (featureManager.IsEnabledAsync(FeatureFlags.ClientOmitNull).GetAwaiter().GetResult())
+            {
+                return new ClientOmitNullResourceSerializer(odataSerializerProvider);
+            }
             else if (featureManager.IsEnabledAsync(FeatureFlags.OmitDefaultValue).GetAwaiter().GetResult())
             {
                 return new OmitPropertyWithDefaultValueResourceSerializer(odataSerializerProvider, new Dictionary<string, object>
