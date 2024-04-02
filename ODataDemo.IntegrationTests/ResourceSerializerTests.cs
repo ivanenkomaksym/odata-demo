@@ -1,3 +1,4 @@
+using ODataDemo.Extensions;
 using ODataDemo.Models;
 
 namespace ODataDemo.IntegrationTests
@@ -19,6 +20,30 @@ namespace ODataDemo.IntegrationTests
             // Assert
             response.EnsureSuccessStatusCode();
             Assert.DoesNotContain(nameof(Customer.UserRole), responseAsStr);
+        }
+
+        [Fact]
+        public async Task ClientOmitNull()
+        {
+            // Arrange
+            var factory = new CustomWebApplicationFactory(FeatureFlags.ClientOmitNull);
+            var client = factory.CreateClient();
+            var url = "odata/Customers";
+
+            // Act
+            var responseWithoutHeader = await client.GetAsync(url);
+            var responseWithoutHeaderAsStr = await responseWithoutHeader.Content.ReadAsStringAsync();
+
+            client.DefaultRequestHeaders.Add(HttpRequestExtensions.PreferHeaderName, HttpRequestExtensions.OmitNullValuesHeaderValue);
+            var responseWithHeader = await client.GetAsync(url);
+            var responseWithHeaderAsStr = await responseWithHeader.Content.ReadAsStringAsync();
+
+            // Assert
+            responseWithoutHeader.EnsureSuccessStatusCode();
+            Assert.Contains(nameof(Customer.UserRole), responseWithoutHeaderAsStr);
+
+            responseWithHeader.EnsureSuccessStatusCode();
+            Assert.DoesNotContain(nameof(Customer.UserRole), responseWithHeaderAsStr);
         }
 
         [Fact]
