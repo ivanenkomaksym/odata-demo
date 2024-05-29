@@ -1,11 +1,12 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Formatter.Serialization;
 using Microsoft.FeatureManagement;
 using Microsoft.OData.ModelBuilder;
+using Microsoft.OpenApi.Models;
 using ODataDemo;
 using ODataDemo.Models;
 using ODataDemo.Serializers;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,12 @@ builder.Services.AddControllers().AddOData(options =>
         modelBuilder.GetEdmModel(),
         ConfigureODataResourceSerializer(builder.Configuration)));
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "OData Demo", Version = "v1" });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,6 +42,12 @@ app.MapControllers();
 app.UseRouting();
 
 app.UseEndpoints(endpoints => endpoints.MapControllers());
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "OData Demo v1");
+});
 
 app.Run();
 
