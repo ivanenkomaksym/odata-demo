@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddFeatureManagement();
 
 var modelBuilder = new ODataConventionModelBuilder();
+modelBuilder.EnableLowerCamelCase();
 modelBuilder.EntityType<Order>();
 modelBuilder.EntitySet<Customer>("Customers");
 
