@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.AspNetCore.OData.Formatter.Serialization;
-using Microsoft.OData.Edm;
 using Microsoft.OData;
+using Microsoft.OData.Edm;
 
 namespace ODataDemo.Serializers
 {

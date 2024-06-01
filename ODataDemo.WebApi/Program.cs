@@ -4,6 +4,7 @@ using Microsoft.FeatureManagement;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using ODataDemo;
+using ODataDemo.Extensions;
 using ODataDemo.Models;
 using ODataDemo.Serializers;
 using System.Diagnostics;
@@ -77,8 +78,8 @@ static Action<IServiceCollection> ConfigureODataResourceSerializer(IConfiguratio
             {
                 return new OmitPropertyWithDefaultValueResourceSerializer(odataSerializerProvider, new Dictionary<string, object>
                 {
-                    { nameof(Customer.StringPropertyWithDefaultValueToBeOmitted), string.Empty },
-                    { nameof(Customer.BooleanPropertyWithDefaultValueToBeOmitted), false }
+                    { nameof(Customer.StringPropertyWithDefaultValueToBeOmitted).ToCamelCase(), string.Empty },
+                    { nameof(Customer.BooleanPropertyWithDefaultValueToBeOmitted).ToCamelCase(), false }
                 });
             }
 

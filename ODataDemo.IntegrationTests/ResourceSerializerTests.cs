@@ -19,7 +19,7 @@ namespace ODataDemo.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
-            Assert.DoesNotContain(nameof(Customer.UserRole), responseAsStr);
+            Assert.DoesNotContain(nameof(Customer.UserRole).ToCamelCase(), responseAsStr);
         }
 
         [Fact]
@@ -40,10 +40,10 @@ namespace ODataDemo.IntegrationTests
 
             // Assert
             responseWithoutHeader.EnsureSuccessStatusCode();
-            Assert.Contains(nameof(Customer.UserRole), responseWithoutHeaderAsStr);
+            Assert.Contains(nameof(Customer.UserRole).ToCamelCase(), responseWithoutHeaderAsStr);
 
             responseWithHeader.EnsureSuccessStatusCode();
-            Assert.DoesNotContain(nameof(Customer.UserRole), responseWithHeaderAsStr);
+            Assert.DoesNotContain(nameof(Customer.UserRole).ToCamelCase(), responseWithHeaderAsStr);
         }
 
         [Fact]
@@ -60,8 +60,8 @@ namespace ODataDemo.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
-            Assert.DoesNotContain(nameof(Customer.StringPropertyWithDefaultValueToBeOmitted), responseAsStr);
-            Assert.DoesNotContain(nameof(Customer.BooleanPropertyWithDefaultValueToBeOmitted), responseAsStr);
+            Assert.DoesNotContain(nameof(Customer.StringPropertyWithDefaultValueToBeOmitted).ToCamelCase(), responseAsStr);
+            Assert.DoesNotContain(nameof(Customer.BooleanPropertyWithDefaultValueToBeOmitted).ToCamelCase(), responseAsStr);
         }
     }
 }
