@@ -1,19 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Query.Validator;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using ODataDemo.Models;
+using ODataDemo.Visitors;
 
 namespace ODataDemo.Controllers
 {
     public class CustomersController : ODataController
     {
-        private static Random random = new Random();
-        private static List<Customer> customers = new List<Customer>(
-            Enumerable.Range(1, 3).Select(idx => new Customer
+        private static readonly int nofCustomers = 10;
+        private static readonly Random random = new();
+        private static readonly UserRole[] userRoles = [UserRole.Admin, UserRole.User];
+        private static readonly List<Customer> customers = new(
+            Enumerable.Range(1, nofCustomers).Select(idx => new Customer
             {
                 Id = idx,
                 Name = $"Customer {idx}",
-                UserRole = null,
+                UserRole = userRoles[idx % 2],
                 Orders = new List<Order>(
                     Enumerable.Range(1, 2).Select(dx => new Order
                     {
@@ -22,10 +26,32 @@ namespace ODataDemo.Controllers
                     }))
             }));
 
-        [EnableQuery]
-        public ActionResult<IEnumerable<Customer>> Get()
+        public IQueryable<Customer> Get(ODataQueryOptions opts)
         {
-            return Ok(customers);
+            var settings = new ODataValidationSettings()
+            {
+                // Initialize settings as needed.
+                AllowedFunctions = AllowedFunctions.All
+            };
+
+            opts.Validate(settings);
+
+            // Extract the filter conditions
+            var filterClause = opts.Filter?.FilterClause;
+            var namesToFilter = new List<string>();
+
+            if (filterClause != null)
+            {
+                var visitor = new FilterVisitor();
+                filterClause.Expression.Accept(visitor);
+
+                namesToFilter = visitor.Names;
+            }
+
+            Console.WriteLine("Filtered Names: " + string.Join(", ", namesToFilter));
+
+            IQueryable results = opts.ApplyTo(customers.AsQueryable());
+            return results as IQueryable<Customer>;
         }
 
         [EnableQuery]
