@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
-using Microsoft.AspNetCore.OData.Query.Validator;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using ODataDemo.Models;
+using ODataDemo.Validators;
 using ODataDemo.Visitors;
+using System.Diagnostics;
 
 namespace ODataDemo.Controllers
 {
@@ -26,27 +27,17 @@ namespace ODataDemo.Controllers
                     }))
             }));
 
+        [QueryOptionsValidator]
         public IQueryable<Customer> Get(ODataQueryOptions opts)
         {
-            var settings = new ODataValidationSettings()
-            {
-                // Initialize settings as needed.
-                AllowedFunctions = AllowedFunctions.All
-            };
-
-            opts.Validate(settings);
-
             // Extract the filter conditions
             var filterClause = opts.Filter?.FilterClause;
-            var namesToFilter = new List<string>();
+            Debug.Assert(filterClause != null);
 
-            if (filterClause != null)
-            {
-                var visitor = new FilterVisitor();
-                filterClause.Expression.Accept(visitor);
+            var visitor = new FilterVisitor();
+            filterClause.Expression.Accept(visitor);
 
-                namesToFilter = visitor.Names;
-            }
+            var namesToFilter = visitor.Names;
 
             Console.WriteLine("Filtered Names: " + string.Join(", ", namesToFilter));
 
