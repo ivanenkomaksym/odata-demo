@@ -17,8 +17,18 @@ builder.Services.AddFeatureManagement();
 
 var modelBuilder = new ODataConventionModelBuilder();
 modelBuilder.EnableLowerCamelCase();
-modelBuilder.EntityType<Order>();
-modelBuilder.EntitySet<Customer>("Customers");
+var orderType = modelBuilder.ComplexType<Order>();
+
+var customersType = modelBuilder.EntitySet<Customer>("Customers").EntityType.HasKey(x => x.Id);
+
+// RegularContract
+var regularContract = modelBuilder.EntityType<RegularContract>().DerivesFrom<IContract>();
+regularContract.Property(x => x.ContractId);
+
+// CombinedContract
+var combinedContract = modelBuilder.EntityType<CombinedContract>().DerivesFrom<IContract>();
+combinedContract.Property(x => x.PrimaryContractId);
+combinedContract.Property(x => x.SecondaryContractId);
 
 builder.Services.AddControllers().AddOData(options =>
     options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null).AddRouteComponents(

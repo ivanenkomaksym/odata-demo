@@ -8,5 +8,6 @@
         public List<Order> Orders { get; set; }
         public string StringPropertyWithDefaultValueToBeOmitted { get; set; } = string.Empty;
         public bool BooleanPropertyWithDefaultValueToBeOmitted { get; set; } = false;
+        public IContract Contract { get; set; }
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 using ODataDemo.Models;
 using ODataDemo.Validators;
 using ODataDemo.Visitors;
-using System.Diagnostics;
 
 namespace ODataDemo.Controllers
 {
@@ -24,25 +23,33 @@ namespace ODataDemo.Controllers
                     {
                         Id = (idx - 1) * 2 + dx,
                         Amount = random.Next(1, 9) * 10
-                    }))
+                    })),
+                Contract = new RegularContract
+                {
+                    ContractId = "Id1"
+                }
             }));
 
         [QueryOptionsValidator]
-        public IQueryable<Customer> Get(ODataQueryOptions opts)
+        public ActionResult<IEnumerable<Customer>> Get(ODataQueryOptions<Customer> queryOptions)
         {
             // Extract the filter conditions
-            var filterClause = opts.Filter?.FilterClause;
-            Debug.Assert(filterClause != null);
+            var filterClause = queryOptions.Filter?.FilterClause;
+            if (filterClause != null)
+            {
+                var visitor = new FilterVisitor();
+                filterClause.Expression.Accept(visitor);
 
-            var visitor = new FilterVisitor();
-            filterClause.Expression.Accept(visitor);
+                var namesToFilter = visitor.Names;
 
-            var namesToFilter = visitor.Names;
+                Console.WriteLine("Filtered Names: " + string.Join(", ", namesToFilter));
 
-            Console.WriteLine("Filtered Names: " + string.Join(", ", namesToFilter));
+                var filteredCustomers = customers.Where(x => namesToFilter.Contains(x.Name));
 
-            IQueryable results = opts.ApplyTo(customers.AsQueryable());
-            return results as IQueryable<Customer>;
+                return Ok(filteredCustomers);
+            }
+
+            return Ok(customers);
         }
 
         [EnableQuery]
