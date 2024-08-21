@@ -6,12 +6,14 @@ using Microsoft.OpenApi.Models;
 using ODataDemo;
 using ODataDemo.Extensions;
 using ODataDemo.Models;
+using ODataDemo.Repository;
 using ODataDemo.Serializers;
 using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<ICustomerRepository, StaticCustomerRepository>();
 
 builder.Services.AddFeatureManagement();
 

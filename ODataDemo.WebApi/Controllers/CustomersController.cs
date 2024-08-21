@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using ODataDemo.Models;
+using ODataDemo.Repository;
 using ODataDemo.Validators;
 using ODataDemo.Visitors;
 
@@ -9,37 +10,18 @@ namespace ODataDemo.Controllers
 {
     public class CustomersController : ODataController
     {
-        private static readonly int nofCustomers = 10;
-        private static readonly Random random = new();
-        private static readonly UserRole[] userRoles = [UserRole.Admin, UserRole.User];
-        private static readonly List<Customer> customers = new(
-            Enumerable.Range(1, nofCustomers).Select(idx => new Customer
-            {
-                Id = idx,
-                Name = $"Customer {idx}",
-                UserRole = userRoles[idx % 2],
-                Orders = new List<Order>(
-                    Enumerable.Range(1, 2).Select(dx => new Order
-                    {
-                        Id = (idx - 1) * 2 + dx,
-                        Amount = random.Next(1, 9) * 10
-                    })),
-                Contract = new RegularContract
-                {
-                    ContractId = "Id1",
-                    Address = new Address
-                    {
-                        Id = 1,
-                        City = "Lviv",
-                        Country = "Ukraine",
-                        Region = "Lviv"
-                    }
-                }
-            }));
+        private readonly ICustomerRepository _customerRepository;
+
+        public CustomersController(ICustomerRepository customerRepository)
+        {
+            _customerRepository = customerRepository;
+        }
 
         [QueryOptionsValidator]
         public ActionResult<IEnumerable<Customer>> Get(ODataQueryOptions<Customer> queryOptions)
         {
+            var customers = _customerRepository.GetCustomers();
+
             // Extract the filter conditions
             var filterClause = queryOptions.Filter?.FilterClause;
             if (filterClause != null)
@@ -62,6 +44,8 @@ namespace ODataDemo.Controllers
         [EnableQuery]
         public ActionResult<Customer> Get([FromRoute] int key)
         {
+            var customers = _customerRepository.GetCustomers();
+
             var item = customers.SingleOrDefault(d => d.Id.Equals(key));
 
             if (item == null)
