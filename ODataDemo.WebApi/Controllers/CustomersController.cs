@@ -26,7 +26,14 @@ namespace ODataDemo.Controllers
                     })),
                 Contract = new RegularContract
                 {
-                    ContractId = "Id1"
+                    ContractId = "Id1",
+                    Address = new Address
+                    {
+                        Id = 1,
+                        City = "Lviv",
+                        Country = "Ukraine",
+                        Region = "Lviv"
+                    }
                 }
             }));
 

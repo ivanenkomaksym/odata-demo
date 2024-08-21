@@ -2,5 +2,6 @@
 {
     public interface IContract
     {
+        public Address Address { get; set; }
     }
 }
