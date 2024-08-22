@@ -63,5 +63,20 @@ namespace ODataDemo.IntegrationTests
             Assert.DoesNotContain(nameof(Customer.StringPropertyWithDefaultValueToBeOmitted).ToCamelCase(), responseAsStr);
             Assert.DoesNotContain(nameof(Customer.BooleanPropertyWithDefaultValueToBeOmitted).ToCamelCase(), responseAsStr);
         }
+
+        [Fact]
+        public async Task MissingFilterQueryOptionMustFail()
+        {
+            // Arrange
+            var factory = new CustomWebApplicationFactory(FeatureFlags.FilterQueryOptionRequired);
+            var client = factory.CreateClient();
+            var url = "odata/Customers";
+
+            // Act
+            var response = await client.GetAsync(url);
+
+            // Assert
+            Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+        }
     }
 }
