@@ -16,7 +16,7 @@ namespace ODataDemo.Repository
                 Orders = new List<Order>(
                     Enumerable.Range(1, 2).Select(dx => new Order
                     {
-                        Id = (idx - 1) * 2 + dx,
+                        OrderId = $"Order {(idx - 1) * 2 + dx}",
                         Amount = random.Next(1, 9) * 10
                     })),
                 Contract = new RegularContract

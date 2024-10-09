@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Formatter.Serialization;
 using Microsoft.FeatureManagement;
+using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using ODataDemo;
@@ -21,7 +22,7 @@ var modelBuilder = new ODataConventionModelBuilder();
 modelBuilder.EnableLowerCamelCase();
 var orderType = modelBuilder.ComplexType<Order>();
 
-var customersType = modelBuilder.EntitySet<Customer>("Customers").EntityType.HasKey(x => x.Id);
+var customersType = modelBuilder.EntitySet<Customer>("Customers").EntityType.HasKey(x => x.Name);
 
 // RegularContract
 var regularContract = modelBuilder.EntityType<RegularContract>().DerivesFrom<IContract>();
@@ -33,10 +34,28 @@ combinedContract.Property(x => x.PrimaryContractId);
 combinedContract.Property(x => x.SecondaryContractId);
 
 builder.Services.AddControllers().AddOData(options =>
+{
     options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null).AddRouteComponents(
         "odata",
         modelBuilder.GetEdmModel(),
-        ConfigureODataResourceSerializer(builder.Configuration)));
+        ConfigureODataResourceSerializer(builder.Configuration));
+
+    options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null).AddRouteComponents(
+        $"odata2/{{resourceId}}",
+        BuildOrderEdmModel(),
+        ConfigureODataResourceSerializer(builder.Configuration));
+    }
+);
+
+static IEdmModel BuildOrderEdmModel()
+{
+    var modelBuilder = new ODataConventionModelBuilder();
+    modelBuilder.EnableLowerCamelCase();
+
+    modelBuilder.EntitySet<Order>("data").EntityType.HasKey(x => x.OrderId);
+
+    return modelBuilder.GetEdmModel();
+}
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
