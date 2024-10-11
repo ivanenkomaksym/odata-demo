@@ -1,5 +1,6 @@
 using ODataDemo.Extensions;
 using ODataDemo.Models;
+using System.Net.Mime;
 
 namespace ODataDemo.IntegrationTests
 {
@@ -94,6 +95,35 @@ namespace ODataDemo.IntegrationTests
             // Assert
             Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
             Assert.Contains("The key value ($filter=status eq 'New') from request is not valid. The key value should be format of type 'Edm.String'", responseAsStr);
+        }
+
+        [Theory]
+        [InlineData("none")]
+        [InlineData("minimal")]
+        [InlineData("full")]
+        public async Task ODataMetadata(string type)
+        {
+            // Arrange
+            var odataMetadataKey = "odata.metadata";
+
+            var factory = new CustomWebApplicationFactory(FeatureFlags.OmitNull);
+            var client = factory.CreateClient();
+            var url = "odata/Customers";
+            client.DefaultRequestHeaders.Add(Microsoft.Net.Http.Headers.HeaderNames.Accept, $"{MediaTypeNames.Application.Json};{odataMetadataKey}={type}");
+
+            // Act
+            var response = await client.GetAsync(url);
+            var responseAsStr = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+
+            if (type == "none")
+                Assert.DoesNotContain("@odata.context", responseAsStr);
+            
+            Assert.Contains(response.Content.Headers, ((header) => header.Key.Equals(Microsoft.Net.Http.Headers.HeaderNames.ContentType)));
+
+            Assert.Contains($"{odataMetadataKey}={type}", response.Content.Headers.GetValues(Microsoft.Net.Http.Headers.HeaderNames.ContentType).First());
         }
     }
 }
