@@ -78,5 +78,22 @@ namespace ODataDemo.IntegrationTests
             // Assert
             Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
         }
+
+        [Fact(Skip = "TODO: Check how it would fail")]
+        public async Task KeySegmentTemplateTryTranslateThrowsUnhandleableException()
+        {
+            // Arrange
+            var factory = new CustomWebApplicationFactory(FeatureFlags.OmitNull);
+            var client = factory.CreateClient();
+            var url = "odata/Customers/abc'";
+
+            // Act
+            var response = await client.GetAsync(url);
+            var responseAsStr = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
+            Assert.Contains("The key value ($filter=status eq 'New') from request is not valid. The key value should be format of type 'Edm.String'", responseAsStr);
+        }
     }
 }
