@@ -8,6 +8,7 @@ By using feature flags in **appsettings.json** we can define OData resource seri
  * **OmitNull** - completely omit all null values from the OData response
  * **ClientOmitNull** - same as previous one, but controlled by the client request header **Prefer: omit-values=nulls**
  * **OmitDefaultValue** - omit defiend properties with default value from the OData response
+ * **FilterQueryOptionRequired** - force the client to pass $filter clause
 
 # Example
 
